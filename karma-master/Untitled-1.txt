@@ -1,0 +1,12 @@
+    localStorage.setItem("idPr" ,JSON.stringify(id));= bech njib les donnees mta3i m localStorage
+    fi html manajamch na3ml boucle
+    bech nab3ath m js l html nesta3ml :     document.getElementById("productName").innerHTML = searchedPr.productName;
+    bech nab3ath m html l js :  document.getElementById("productName").value = "";
+    {} :objet
+    [] :tableau
+    comparaison: avec ==: comapaison de valeur non valeur et type ou === comparaison valeur et type
+    != different
+    bech nostoki 7aja fi localstorage lazem njib les donnees lo9dom
+    
+
+
