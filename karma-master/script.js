@@ -23,7 +23,7 @@ function signup() {
 
     }
     var email = document.getElementById("email").value;
-    //controle de saisi pour validite de email
+    //controle de saisi pour validiter email
 
     var verifEmail = validateEmail(email);
     if (verifEmail) {
@@ -64,7 +64,7 @@ function signup() {
     }
     if (verifFirstName && verifLastName && verifEmail && verifPwd && pwd == confirmPwd && tel.length == 8) {
         // recuperation de tableau users du localStorage 
-        var users = JSON.parse(localStorage.getItem("users") || "[]"); // (ya3ni valeur eli bech tjini m localstorge bech n7awalha m chaine de caractere l objet)
+        var users = JSON.parse(localStorage.getItem("users") || "[]"); 
         var idUser = JSON.parse(localStorage.getItem("idUser") || "10");
         // regrouper les donnees dans un objet user
         var user = {
@@ -80,10 +80,10 @@ function signup() {
 
         // push(user) : ajouter l'objet user dans le tableau users 
         users.push(user);
-        //9bal manraja3 tableau avec setItem(cle, valeur) lazem nconvertih l chaine de caractere avec JSON.stringify(cle)
         localStorage.setItem("users", JSON.stringify(users));
         // donner l'id suivant 
         localStorage.setItem("idUser", idUser + 1);
+        location.replace('login.html');
 
     }
 }
@@ -159,6 +159,8 @@ function addProduct() {
         document.getElementById("categoryError").style.color = "red";
 
     }
+    var productImage = document.getElementById("avatar").value;
+    var newImage = replacePath(productImage);
     if (verifProductName && price > 0 && stock > 10 && category.length != 0 && !prodExist) {
         // recuperation de tableau products du localStorage   
         var products = JSON.parse(localStorage.getItem("products") || "[]");
@@ -169,14 +171,17 @@ function addProduct() {
             productName: productName,
             price: price,
             stock: stock,
-            category: category
+            category: category,
+            image : newImage
+
         };
         // push(product) : ajouter l'objet product dans le tableau products 
         products.push(product);
-        //9bal manraja3 tableau avec setItem(cle, valeur) lazem nconvertih l chaine de caractere avec JSON.strinify(cle)
         localStorage.setItem("products", JSON.stringify(products));
         // donner l'id suivant
         localStorage.setItem("idProduct", idProduct + 1);
+        location.replace("index.html");
+
 
     }
 
@@ -194,7 +199,7 @@ function validateEmail(email) {
     const regExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return regExp.test(String(email).toLowerCase());
 }
-//fonction qui permet de chercher un Produit dans une table dans localstorage
+//fonction qui permet de chercher un Produit existant ou nondans une table dans localstorage
 function searchProduct(name) {
     var products = JSON.parse(localStorage.getItem("products") || "[]");
     var productExist = false;
@@ -211,10 +216,7 @@ function searchProduct(name) {
 }
 //fonction 
 function displayProducts() {
-    // bech njib les donnees mta3i m localstorage
     var products = JSON.parse(localStorage.getItem("products") || "[]");
-    // on a declarer une variable bech n7otou fiha code mta3 tableau w ba3d bech nab3athha m js l html
-    // n7otou m loul entete mta3 tableau wa7adha 5ater man7ibhech tet3awed akther m mara
     var prTable = ` <table class ="table table-hover">
         <tr>
             <th> Product Name </th>
@@ -242,9 +244,7 @@ function displayProducts() {
         //pour declaration d'une variable on utilise ${}
 
     }
-    // prTable 9dima + prTable jdida
     prTable = prTable + `</table>  `;
-    //ab3athli prTable eli hiya fiha code html mta3 tableau ab3athha l element 3andou prTable
     document.getElementById('prTable').innerHTML = prTable;
 
 
@@ -282,14 +282,11 @@ function displayUsers() {
 
 
 }
-// fonction qui permet lorsqu'on clique sur le bouton display  bech thizna m page admin l page displayProduct
 function displayProduct(id) {
-    // bech njib les donnes m localStorage
     localStorage.setItem("idPr", JSON.stringify(id));
     location.replace('displayProduct.html');
 
 }
-// <!-- la fonction qui permet d'afficher les donnees de products  eli ne5tarouh wa9t on clique sur le bouton display de la page admin  (table products) -->
 function displayProductDetails() {
     var idPr = localStorage.getItem('idPr');
     var searchedPr = searchById(Number(idPr), "products");
@@ -313,14 +310,11 @@ function searchById(x, T) {
     return obj;
 
 }
-// fonction qui permet lorsqu'on clique sur le bouton display  bech thizna m page admin l page displayUser
 function displayUser(id) {
-    // bech njib les donnes m localStorage
     localStorage.setItem("idUsr", JSON.stringify(id));
     location.replace('displayUser.html');
 
 }
-// <!-- la fonction qui permet d'afficher les donnees de products  eli ne5tarouh wa9t on clique sur le bouton display de la page admin  (table users) -->
 
 function displayUserDetails() {
     var idUsr = localStorage.getItem('idUsr');
@@ -334,11 +328,9 @@ function displayUserDetails() {
     document.getElementById("tel").innerHTML = searchedUsr.tel;
 
 }
-//fonction sur le bouton Edit de la page admin(table products) qui permet d'afficher les donnees de products  eli ne5tarouh wa9t on clique sur le bouton Edit  
 function editProduct(id) {
     var searchedPr = searchById(id, "products");
     //  console.log(searchedPr);
-    //declarer une variable editPr eli bech n7otou fiha les input price et stock
     var editPr = `
     <div class="col-md-12 form-group">
     <input type="text" class="form-control" id="newPrice" name="name" placeholder="Price" value=${searchedPr.price} >
@@ -402,11 +394,9 @@ function deleteObject(pos, T) {
     localStorage.setItem(T, JSON.stringify(objects));
     location.reload();
 }
-//fonction sur le bouton Edit de la page admin(table products) qui permet d'afficher les donnees de products  eli ne5tarouh wa9t on clique sur le bouton Edit  
 function editUser(id) {
     var searchedUsr = searchById(id, "users");
     //console.log(searchedUsr);
-    //declarer une variable editPr eli bech n7otou fiha les input price et stock
     var editUsr = `
   
 <div class="col-md-12 form-group">
@@ -428,7 +418,6 @@ function editUser(id) {
 
 
 }
-// foction validateEditUser 
 function validateEditUser(id) {
     var newPwd = document.getElementById("newPwd").value;
     var verifPwd = verifLength(newPwd, 8);
@@ -475,11 +464,11 @@ function insertSuperAdmin() {
 
     var superAdmin = {
         id: 1,
-        firstName: "Marwa",
-        lastName: "Ghanmy",
-        email: "marwaghanmi20@gmail.com",
-        pwd: "superadmin2020",
-        tel: "20202692",
+        firstName: "shop",
+        lastName: "shop",
+        email: "shop22@gmail.com",
+        pwd: "admin2021",
+        tel: "22 345678",
         role: "super admin"
     };
 
@@ -531,7 +520,7 @@ function login() {
     var users = JSON.parse(localStorage.getItem("users") || "[]");
 
     for (let i = 0; i < users.length; i++) {
-        if (users[i].email == emailLogin && users[i].pwd == pwdLogin) {
+        if ((users[i].email == emailLogin) && (users[i].pwd == pwdLogin)) {
             var findedUser = users[i];
             console.log(findedUser);
         }
@@ -601,13 +590,11 @@ function displayProductsToReserve() {
 
 
 }
-// function sur qty de stock
 function validateReservation() {
     var qty = document.getElementById("qtyToReserve").value;
     var idPrToReserve = localStorage.getItem("idPrToReserve");
     console.log("idPrToReserve", idPrToReserve);
 
-    // lawejt 3 produit b searchedPr
     var searchedPr = searchById(idPrToReserve, "products");
     console.log("product", searchedPr);
     var connectedUser = JSON.parse(localStorage.getItem("connectedUser"));
@@ -628,17 +615,15 @@ function validateReservation() {
         localStorage.setItem("orders", JSON.stringify(orders));
         localStorage.setItem("idOrder", idOrder + 1);
         //Partie de mise a jour sur stock
-        // njib tableau m localalstorage
         var products = JSON.parse(localStorage.getItem("products") || "[]");
-        // nboucli 3 tableau
+        // boucler le tableau
         for (let i = 0; i < products.length; i++) {
             //si id de product == idPrToReserve
             if (products[i].id == idPrToReserve) {
-                //si id de product == idPrToReserve new stock na5ou stock 9dim na9sou menou qty
+                //si id de product == idPrToReserve new stock prendre lA valeur du ancien stock et soustraire  la qty
                 products[i].stock = products[i].stock - qty;
 
             }
-            // nkamel n3aweb nraja3 tableau l localstorage
             localStorage.setItem("products", JSON.stringify(products));
         }
         location.replace("panier.html");
@@ -650,12 +635,12 @@ function validateReservation() {
     }
 }
 function panier() {
-    // bech njib m localstorage les users connecte
+    //recuperer du localstorage les users connectes
     var connectedUser = JSON.parse(localStorage.getItem("connectedUser"));
-    //bech njib les orders kol w n7othom fi tableau myorders
+    //recuperer tous les orders et l'enregistrer dans le  tableau myorders
     var orders = JSON.parse(localStorage.getItem("orders") || "[]");
     console.log(orders);
-    // nboukli 3 orders
+    // boucler le tableau orders
     var myOrders = [];
     for (let i = 0; i < orders.length; i++) {
         if (orders[i].idUser == connectedUser.id) {
@@ -784,7 +769,6 @@ function editOrder(id) {
     </div>`;
     document.getElementById("editOrder").innerHTML = editOrder
 }
-// function eli bech ta3mli edit lorsqu'on clique sur bouton validate
 function validateEditOrder(id) {
     var newQty = document.getElementById("editQtyOrder").value;
     //console.log(newQty);
@@ -795,7 +779,7 @@ function validateEditOrder(id) {
 
     var diff = Number(newQty) - Number(order.qty);
     //console.log(diff);
-    //conditon si stock inf 3 diff 
+    //conditon si stock inf a diff 
     if (product.stock < diff) {
         document.getElementById("editOrderError").innerHTML = "Qty not available";
         document.getElementById("editOrderError").style.color = "red";
@@ -807,7 +791,7 @@ function validateEditOrder(id) {
         document.getElementById("editOrderError").style.color = "red";
         //conditon si newQty == 0  
     } else if (newQty == 0) {
-        // deleteOrder tfassa5 w ta3ml mise a jour en meme temps
+        // deleteOrder supprimer et  mise a jour en meme temps
         deleteOrder(searchObjectPosition(order.id, 'orders'), order.id);
 
     } else {
@@ -842,8 +826,6 @@ function validateEditOrder(id) {
 
 }
 function sendMessage() {
-    // recupere l
-
     var name = document.getElementById("name").value;
     var verifName = verifLength(name, 5);
     if (verifName) {
@@ -889,7 +871,7 @@ function sendMessage() {
         var messages = JSON.parse(localStorage.getItem("messages") || "[]");
         var idMsg = JSON.parse(localStorage.getItem("idMsg") || "1");
         var users = JSON.parse(localStorage.getItem("users") || "[]");
-        // houni ntastiw 3 email 
+        // tester email 
         var idUser = 0;
         for (let i = 0; i < users.length; i++) {
             if (users[i].email == email) {
@@ -899,7 +881,6 @@ function sendMessage() {
         }
         //var connectedUser = JSON.parse(localStorage.getItem("connectedUser"));
         // if(connectedUser){
-        //     //ken l9it valeur fi connecteUser a3tini
         //      idUser = connectedUser.id;
         // }
 
@@ -910,7 +891,7 @@ function sendMessage() {
             subject: subject,
             name: name,
             emailEmet: email,
-            emailRec: "marwaghanmi18@gmail.com",
+            emailRec: "shop22@gmail.com",
             message: msg
         };
 
@@ -960,7 +941,7 @@ function displayMessages() {
 }
 function answerMessage(id) {
     var searchedMsg = searchById(id, "messages");
-    // declarer une variable n7otou fiha html 
+    // declarer une variable pour le code html 
     var answerMsg = `
         
     <div class="col-md-12 form-group">
@@ -1003,9 +984,9 @@ function validateSendMessage(id) {
             subject: searchedMsg.subject,
             emailRec: searchedMsg.emailEmet,
             message: newMsg,
-            emailEmet: "marwaghanmi18@gmail.com",
+            emailEmet: "shop22@gmail.com",
             idUser: 1,
-            name: "Marwa"
+            name: "shop"
 
         };
 
@@ -1153,6 +1134,14 @@ function dispalaySearchedProduct() {
     document.getElementById("result").innerHTML = result;
 
 }
+function replacePath(path) {
+
+
+    var newpath = path.replace(/\\/g, "/");
+    var res = newpath.replace("fakepath", "/Users/ACER/Desktop/karma-master/img");
+    return res;
+  
+  }
 
 
 
